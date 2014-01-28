@@ -13,17 +13,19 @@ def getSoup(website):
 #FUNCTION TO EXTRACT FOUR FACTORS FROM A SOUP
 
 def getFourFactors(soupIn):
+    dataRow = []
+    colHeaders = ['Date','School1','School1_Pace','School1_eFG','School1_TOV','School1_ORB','School1_FT/FGA',
+                  'School1_ORTG','School2','School2_Pace','School2_eFG','School2_TOV','School2_ORB',
+                  'School2_FT/FGA','School2_ORTG']
     table = soupIn.find('table', {'id': 'four_factors'})
     date = soupIn.find('a', {'href': re.compile('/cbb/boxscores/index.cgi?.*')})
     tableRows = table.findAll('td')
-    d = {'Date' : [date.text], 'School1': [tableRows[0].text], 'School1_Pace' : [tableRows[1].text],
-         'School1_eFG' : [tableRows[2].text],'School1_TOV' : [tableRows[3].text], 'School1_ORB' : [tableRows[4].text],
-         'School1_FT/FGA' : [tableRows[5].text],'School1_ORTG' : [tableRows[6].text], 'School2': [tableRows[7].text],
-         'School2_Pace' : [tableRows[8].text], 'School2_eFG' : [tableRows[9].text],'School2_TOV' : [tableRows[10].text],
-         'School2_ORB' : [tableRows[11].text], 'School2_FT/FGA' : [tableRows[12].text],'School2_ORTG' : [tableRows[13].text]}
-    return d
+    dataRow.append(date.text)
+    for value in tableRows:
+        dataRow.append(value.text)
+    return dataRow
 
 
 soup = getSoup("http://www.sports-reference.com/cbb/boxscores/2014-01-26-arizona.html")
 fourFactors = getFourFactors(soup)
-print(pd.DataFrame(fourFactors))
+print(fourFactors)
