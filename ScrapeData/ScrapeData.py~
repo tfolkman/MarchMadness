@@ -1,0 +1,14 @@
+#BRING IN LIBRARIES
+
+import requests
+from bs4 import BeautifulSoup
+
+#FUNCTION TO GET SOUP FROM WEBSITE
+
+def getSoup(website):
+    r = requests.get(website)
+    return BeautifulSoup(r.text)
+
+
+
+print(getSoup("http://www.sports-reference.com/cbb/boxscores/2014-01-26-arizona.html"))
