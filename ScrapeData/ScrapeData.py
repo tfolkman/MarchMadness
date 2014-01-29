@@ -25,7 +25,15 @@ def getFourFactors(soupIn):
         dataRow.append(value.text)
     return dataRow
 
+def getBoxScores(soupIn):
+    allLinks = soupIn.findAll('a')
+    gameLinks = []
+    for link in allLinks:
+        if link.text == "Final":
+            gameLinks.append(link['href'])
+    return gameLinks
 
-soup = getSoup("http://www.sports-reference.com/cbb/boxscores/2014-01-26-arizona.html")
-fourFactors = getFourFactors(soup)
-print(fourFactors)
+soup = getSoup("http://www.sports-reference.com/cbb/boxscores/index.cgi?month=11&day=12&year=2010")
+boxScores = getBoxScores(soup)
+for i in boxScores:
+    print i
