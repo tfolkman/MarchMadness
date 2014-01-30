@@ -1,6 +1,6 @@
 #BRING IN LIBRARIES
 
-import re, csv
+import re, csv, datetime
 from urllib2 import urlopen
 import pandas as pd
 from bs4 import BeautifulSoup
@@ -51,6 +51,17 @@ def processDate(linkIn):
             fourFactors = getFourFactors(scoreSoup)
             writer.writerow(fourFactors)
 
-#PROCESS A DATE
+#CREATE SERIES OF DATES
 
-processDate("http://www.sports-reference.com/cbb/boxscores/index.cgi?month=11&day=12&year=2010")
+def dateSeries(startDate=datetime.datetime(2010,11,12),endDate=datetime.datetime.today() - datetime.timedelta(days=1)):
+    timeDelta = datetime.timedelta(days=1)
+    days = []
+    while startDate < endDate:
+        days.append([startDate.strftime('%m'),startDate.strftime('%d'),startDate.strftime('%Y')])
+        startDate += timeDelta
+    return days
+
+#####
+
+days = dateSeries(endDate=datetime.datetime(2010,11,15))
+print (days)
