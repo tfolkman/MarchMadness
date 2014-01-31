@@ -76,26 +76,26 @@ colHeaders = ['Date', 'School1', 'School1_Pace', 'School1_eFG%', 'School1_TOV%',
 
 #PROCESS A DATE
 
-month = 1
-year = 2014
-day = 29
 
-fileOut = open("./Output/{y}_{m}_{d}.csv".format(y=year, m=month, d=day), 'w')
-writeFileOut = csv.writer(fileOut)
-writeFileOut.writerow(colHeaders)
-daySoup = getsoup("http://www.sports-reference.com/cbb/boxscores/index.cgi?month={m}&day={d}&year={y}".format(m=month,
-                                                                                                              d=day,
-                                                                                                              y=year))
-boxLinks = getboxlinks(daySoup)
-for link in boxLinks[:2]:
-    dataRow = []
-    boxSoup = getsoup(link)
-    fourFactors = getfourfactors(boxSoup)
-    for factor in fourFactors:
-        dataRow.append(factor)
-    teamStats = getteamstats(boxSoup)
-    for stat in teamStats:
-        dataRow.append(stat)
-    print link
-    writeFileOut.writerow(dataRow)
-fileOut.close()
+def processdate(month, day, year):
+    daysoup = getsoup("http://www.sports-reference.com/cbb/boxscores/index.cgi?month={m}&day={d}&year={y}".format(
+        m=month, d=day, y=year))
+    boxlinks = getboxlinks(daysoup)
+    allrows = []
+    for link in boxlinks:
+        datarow = []
+        boxsoup = getsoup(link)
+        fourfactors = getfourfactors(boxsoup)
+        for factor in fourfactors:
+            datarow.append(factor)
+            teamstats = getteamstats(boxsoup)
+        for stat in teamstats:
+            datarow.append(stat)
+        allrows.append(datarow)
+    return allrows
+
+#TEST
+
+test = processdate(11, 12, 2010)
+for row in test:
+    print row
