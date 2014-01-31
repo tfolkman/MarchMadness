@@ -63,5 +63,11 @@ def dateSeries(startDate=datetime.datetime(2010,11,12),endDate=datetime.datetime
 
 #####
 
-days = dateSeries(endDate=datetime.datetime(2010,11,15))
-print (days)
+#WORK ON GETTING THE OTHER TABLES
+
+soup = getSoup("http://www.sports-reference.com/cbb/boxscores/2014-01-29-stanford.html")
+teamTables = soup.findAll('tr', {'class': 'bold_text stat_total'})
+for table in teamTables:
+    stats = table.findAll('td')
+    for stat in stats:
+        print stat.renderContents().strip()
