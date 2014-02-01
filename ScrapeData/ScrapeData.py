@@ -1,8 +1,9 @@
 #BRING IN LIBRARIES
 
 import re
-import csv
 import datetime
+import csv
+import logging
 from urllib2 import urlopen
 from bs4 import BeautifulSoup
 
@@ -82,20 +83,45 @@ def processdate(month, day, year):
         m=month, d=day, y=year))
     boxlinks = getboxlinks(daysoup)
     allrows = []
+    logger.info('{0}_{1}_{2}'.format(year, month, day))
     for link in boxlinks:
+        logger.info('\t{0}'.format(link))
         datarow = []
         boxsoup = getsoup(link)
         fourfactors = getfourfactors(boxsoup)
         for factor in fourfactors:
             datarow.append(factor)
-            teamstats = getteamstats(boxsoup)
+        teamstats = getteamstats(boxsoup)
         for stat in teamstats:
             datarow.append(stat)
         allrows.append(datarow)
     return allrows
 
-#TEST
+#SET UP LOG
 
-test = processdate(11, 12, 2010)
-for row in test:
-    print row
+# create logger with 'spam_application'
+logger = logging.getLogger("ScrapeData")
+logger.setLevel(logging.DEBUG)
+# create file handler which logs even debug messages
+ch = logging.FileHandler('ScrapeData.log')
+ch.setLevel(logging.DEBUG)
+# create formatter and add it to the handlers
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+ch.setFormatter(formatter)
+# add the handlers to the logger
+logger.addHandler(ch)
+
+#LOOP OVER ALL DATES
+
+f = open('./Output/test.csv', 'w')
+a = csv.writer(f)
+a.writerow(colHeaders)
+
+listOfDates = dateseries(startdate=datetime.datetime(2010, 11, 12), enddate=datetime.datetime(2010, 11, 14))
+for date in listOfDates:
+    rowsFromDate = processdate(date[0], date[1], date[2])
+    for row in rowsFromDate:
+        a.writerow(row)
+    logger.info('Written to File!')
+
+f.close()
