@@ -1,0 +1,6 @@
+*.log
+*.zip
+*.idea*
+/ScrapeData/Output/*
+.DS_Store
+/Raw Data/*

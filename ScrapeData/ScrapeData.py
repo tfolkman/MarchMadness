@@ -117,7 +117,7 @@ f = open('./Output/test.csv', 'w')
 a = csv.writer(f)
 a.writerow(colHeaders)
 
-listOfDates = dateseries(startdate=datetime.datetime(2010, 11, 12), enddate=datetime.datetime(2010, 11, 14))
+listOfDates = dateseries(startdate=datetime.datetime(2013, 11, 12))
 for date in listOfDates:
     rowsFromDate = processdate(date[0], date[1], date[2])
     for row in rowsFromDate:
